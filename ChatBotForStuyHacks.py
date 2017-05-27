@@ -15,6 +15,12 @@ def findName(name):
             return words[i+1]
     return name
 
+def findQuestion(message, end):
+    for "?" in message:
+        Quest = True
+    if Quest == True:
+        print 
+
 def botResponse(message):
     response=""
     if message[0]=="i":
