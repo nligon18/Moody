@@ -15,37 +15,42 @@ def findName(name):
             return words[i+1]
     return name
 
-def findQuestion(message, end):
-    for "?" in message:
-        Quest = True
-    if Quest == True:
-        print 
+#def findQuestion(message, end):
 
-def botResponse(message):
+def modifyMood(mood):
     if mood=="Joy":
-        mood="happy"
+        return "happy"
     if mood=="Anger":
-        mood="angry"
+        return "angry"
     if mood=="Disgust":
-        mood+="ed"
+        return "disgusted"
     if mood=="Sadness":
-        mood="sad"
+        return "sad"
     if mood=="Fear":
-        mood="scared"
+        return "scared"
+    return mood
+
+def changePronouns(message):
     response=""
-    end=message.find("?")
-    if end!=-1:
-        question=findQuestion(message,end)
-        
-    elif message[0]=="i":
-        words=message.split(" ")
-        for i in range(0,len(words)):
-            if words[i] in PRONOUNS:
-                words[i]=PRONOUN_MAPS[words[i]]
-            response+=words[i]+" "
-    else:
+    words=message.split(" ")
+    for i in range(0,len(words)):
+        if words[i] in PRONOUNS:
+            words[i]=PRONOUN_MAPS[words[i]]
+        response+=words[i]+" "
+    return response[:-1]
+
+def botResponse(message,mood):
+    mood=modifyMood(mood)    #Finds Mood
+    response=""
+    #end=message.find("?")
+    #if end!=-1:
+    #    question=findQuestion(message,end)                                         #finds what the question is
+    response=changePronouns(message)
+    if not message[0]=="i":
         response="you are "+message
-    return "I understand that "+response+". Why? Are you feeling "+mood+"?"
+    if mood=="unsure":
+        return "I understand that "+response[:-1]+". How was your day?"             #two responses
+    return "I understand that "+response[:-1]+". Are you feeling "+mood+"?"
 
 
 def removeUnwantedNumbers(message):
@@ -71,11 +76,12 @@ def main():
     name=findName(name)
     message=raw_input("Hi "+name+"! How are you?\n").lower()
     message=removeUnwantedSymbols(message)
+    mood=MoodyBot.getEmotion(message)
     while not removeUnwantedNumbers(message) in ENDS:
-        response=botResponse(message)
+        response=botResponse(message,mood)
         message=raw_input(response+"\n").lower()
         message=removeUnwantedSymbols(message)
-        print(MoodyBot.getEmotion("happy"))
+        mood=MoodyBot.getEmotion(message)
     print("Bye! Come back soon!")
 
 main()
