@@ -32,6 +32,8 @@ def getEmotion(user_response):
 		responseArray.append(responseSelector['document_tone']['tone_categories'][0]['tones'][indexvalue]['score'])
 		indexvalue - 1
 	# Determines most likely emotion and its value + key
+	if max(responseArray) < 0.5:
+		return unsure
 	emotionKeyIndex = responseArray.index(max(responseArray))
 	emotionValue = responseSelector['document_tone']['tone_categories'][0]['tones'][emotionKeyIndex]['tone_name']
 	#print emotionValue
