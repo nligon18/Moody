@@ -1,7 +1,7 @@
 import MoodyBot
 
 LETTERS="abcdefghijklmnopqrstuvwxyz"
-SYMBOLS="!@#$%^&*();:.><,/?|{}'~`[]{}'"
+SYMBOLS="!@#$%^&*();:.><,/|{}'~`[]{}'"
 NUMBERS="123456789"
 ENDS=["bye","goodbye","adios","see ya","see you later","good bye"]
 WORDS_BEFORE_NAMES=["is","named","am","im"]
@@ -15,13 +15,10 @@ def findName(name):
             return words[i+1]
     return name
 
-def findQuestion(message, end):
-    for "?" in message:
-        Quest = True
-    if Quest == True:
-        print 
+def findQuestion(message,end):
+    
 
-def botResponse(message):
+def botResponse(message,mood):
     if mood=="Joy":
         mood="happy"
     if mood=="Anger":
@@ -47,7 +44,6 @@ def botResponse(message):
         response="you are "+message
     return "I understand that "+response+". Why? Are you feeling "+mood+"?"
 
-
 def removeUnwantedNumbers(message):
     for item in NUMBERS:
         parts=message.split(item)
@@ -71,11 +67,12 @@ def main():
     name=findName(name)
     message=raw_input("Hi "+name+"! How are you?\n").lower()
     message=removeUnwantedSymbols(message)
+    mood=MoodyBot.getEmotion(message)
     while not removeUnwantedNumbers(message) in ENDS:
-        response=botResponse(message)
+        response=botResponse(message,mood)
         message=raw_input(response+"\n").lower()
         message=removeUnwantedSymbols(message)
-        print(MoodyBot.getEmotion("happy"))
+        mood=MoodyBot.getEmotion(message)
     print("Bye! Come back soon!")
 
 main()
