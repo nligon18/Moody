@@ -13,14 +13,14 @@ tone_analyzer = ToneAnalyzerV3(
 def getEmotion(user_response):
 	user_response = json.dumps(user_response)
 	# User JSON
-	with open('text.json') as f:
-		tone = tone_analyzer.tone(json.load(f)['text'], tones='emotion')
-		response = json.dumps(tone, indent=2)
-		print response
+	#with open('text.json') as f:
+	#	tone = tone_analyzer.tone(json.load(f)['text'], tones='emotion')
+	#	response = json.dumps(tone, indent=2)
+	#	print response
 	# User Text String Input
 	tone = tone_analyzer.tone(user_response, tones='emotion')
 	response = json.dumps(tone, indent=2)
-	print response
+	#print response
 
 
 	responseSelector = json.loads(response)
@@ -34,6 +34,6 @@ def getEmotion(user_response):
 	# Determines most likely emotion and its value + key
 	emotionKeyIndex = responseArray.index(max(responseArray))
 	emotionValue = responseSelector['document_tone']['tone_categories'][0]['tones'][emotionKeyIndex]['tone_name']
-	print emotionValue
+	#print emotionValue
 	return emotionValue
 	# loop 5 times place values into python array
