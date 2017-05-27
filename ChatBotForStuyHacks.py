@@ -7,6 +7,8 @@ ENDS=["bye","goodbye","adios","see ya","see you later","good bye"]
 WORDS_BEFORE_NAMES=["is","named","am","im"]
 PRONOUN_MAPS={"you":"i","i":"you","we":"you guys","he":"he","she":"she","they":"they","us":"you guys","me":"you","it":"it","am":"are","im":"you are","my":"your","your":"my","mine":"yours","yours":"mine","ours":"yours"}
 PRONOUNS=["you","i","we","they","it","he","she","me","us","am","are","im","your","my","mine","yours"]
+questionAsked=False
+
 
 def findName(name):
     words=name.split(" ")
@@ -40,7 +42,7 @@ def changePronouns(message):
     return response[:-1]
 
 def botResponse(message,mood):
-    mood=modifyMood(mood)    #Finds Mood
+    mood=modifyMood(mood)                                                           #Finds Mood
     response=""
     #end=message.find("?")
     #if end!=-1:
@@ -49,7 +51,8 @@ def botResponse(message,mood):
     if not message[0]=="i":
         response="you are "+message
     if mood=="unsure":
-        return "Oh, "+response+". How was your day?"             #two responses
+        questionAsked=True
+        return "Oh, "+response+". How was your day?"                                #two responses
     return "Oh, "+response+". Are you feeling "+mood+"?"
 
 
@@ -70,18 +73,46 @@ def removeUnwantedSymbols(message):
     return message
 
 def main():
+    lastMood="unsure"
+    sameMood=False
+
+    
     name=raw_input("Hi! My name is Moody. What is your name?\n").lower()
     name=removeUnwantedSymbols(name)
     name=removeUnwantedNumbers(name)
     name=findName(name)
+
+    
     message=raw_input("Hi "+name+"! How are you?\n").lower()
     message=removeUnwantedSymbols(message)
+
+
     mood=MoodyBot.getEmotion(message)
+    if mood==lastMood:
+        sameMood=True
+    else:
+        sameMood=False
+    lastMood=mood
+
+    
     while not removeUnwantedNumbers(message) in ENDS:
-        response=botResponse(message,mood)
+        mood=MoodyBot.getEmotion(message)
+        if mood==lastMood:
+            sameMood=True
+        else:
+            sameMood=False
+        lastMood=mood
+        
+        response=botResponse(message,mood,sameMood)
+
+        
         message=raw_input(response+"\n").lower()
         message=removeUnwantedSymbols(message)
+
+        
         mood=MoodyBot.getEmotion(message)
+
+        
     print("Bye! Come back soon!")
 
 main()
