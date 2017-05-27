@@ -49,8 +49,8 @@ def botResponse(message,mood):
     if not message[0]=="i":
         response="you are "+message
     if mood=="unsure":
-        return "I understand that "+response[:-1]+". How was your day?"             #two responses
-    return "I understand that "+response[:-1]+". Are you feeling "+mood+"?"
+        return "Oh, "+response+". How was your day?"             #two responses
+    return "Oh, "+response+". Are you feeling "+mood+"?"
 
 
 def removeUnwantedNumbers(message):
