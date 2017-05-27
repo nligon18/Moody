@@ -44,15 +44,15 @@ def removeUnwantedSymbols(message):
     return message
 
 def main():
-    name=input("Hi! My name is Moody. What is your name?\n").lower()
+    name=raw_input("Hi! My name is Moody. What is your name?\n").lower()
     name=removeUnwantedSymbols(name)
     name=removeUnwantedNumbers(name)
     name=findName(name)
-    message=input("Hi "+name+"! How are you?\n").lower()
+    message=raw_input("Hi "+name+"! How are you?\n").lower()
     message=removeUnwantedSymbols(message)
     while not removeUnwantedNumbers(message) in ENDS:
         response=botResponse(message)
-        message=input(response+"\n").lower()
+        message=raw_input(response+"\n").lower()
         message=removeUnwantedSymbols(message)
         MoodyBot.getEmotion(message)
     print("Bye! Come back soon!")
