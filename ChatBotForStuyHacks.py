@@ -55,10 +55,10 @@ def botResponse(message,mood,sameMood):
         return "Oh, "+response+". How was your day?"                                #two responses
     questionAsked=True
     if sameMood:
-        message="Oh, "+response+"."
+        finalResponse="Oh, "+response+"."
     else:
-        message="Oh, "+response+". Are you feeling "+mood+" ?"
-    return message
+        finalResponse="Oh, "+response+". Are you feeling "+mood+"?"
+    return finalResponse
 
 
 def removeUnwantedNumbers(message):
