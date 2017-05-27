@@ -41,7 +41,7 @@ def changePronouns(message):
         response+=words[i]+" "
     return response[:-1]
 
-def botResponse(message,mood):
+def botResponse(message,mood,sameMood):
     mood=modifyMood(mood)                                                           #Finds Mood
     response=""
     #end=message.find("?")
@@ -53,7 +53,12 @@ def botResponse(message,mood):
     if mood=="unsure":
         questionAsked=True
         return "Oh, "+response+". How was your day?"                                #two responses
-    return "Oh, "+response+". Are you feeling "+mood+"?"
+    questionAsked=True
+    if sameMood:
+        message="Oh, "+response+"."
+    else:
+        message="Oh, "+response+". Are you feeling "+mood+" ?"
+    return message
 
 
 def removeUnwantedNumbers(message):
