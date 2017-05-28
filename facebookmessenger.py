@@ -82,7 +82,9 @@ def encrypt(password):
     text_file.close()
     return cipher_text
 # hash = encrypt("moodybotchatstuyhacksSALTSALTBAL")
+fbun = raw_input('Enter your FB Email')
 fbpw = raw_input('Enter your FB Password: ')
+# SALTSALTBAL is Hash Salt
 hash = encrypt(fbpw + "SALTSALTBAL")
 
 print hash
@@ -95,5 +97,5 @@ def decryptPW():
     print plain_text
     return plain_text
 decryptedPW = decryptPW()
-bot = EchoBot("moodybotchat@gmail.com", decryptedPW)
+bot = EchoBot(fbun, decryptedPW)
 bot.listen()
