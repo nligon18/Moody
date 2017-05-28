@@ -39,10 +39,10 @@ class EchoBot(fbchat.Client):
          message = cb.removeUnwantedSymbols(message)
          mood = MoodyBot.getEmotion(message)
          moodyResponse = cb.botResponse(message, mood, lastMood, questionAsked, whatAskedAbout)
-
+         lastMood = mood
          # if you are not the author, echo
          if str(author_id) != str(self.uid):
-            self.send(author_id,author_id)
+            #self.send(author_id,author_id)
             self.send(author_id,moodyResponse)
  
 bot = EchoBot("moodybotchat@gmail.com", "moodybotchatstuyhacks")

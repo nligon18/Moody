@@ -4,10 +4,6 @@ import json
 import ChatBotForStuyHacks
 import MoodyBot
 
-lastMood="unclear"
-questionAsked=False
-whatAskedAbout="none"
-
 def  getName(author_id):
 	url = "https://graph.facebook.com/" + author_id + "?fields=name&access_token=1910943402516729|NFxHu_FCpNW-Cj1zHRIIfoB5FQI"
 	FBresponse = requests.get(url)
@@ -50,31 +46,30 @@ def retrieveMsg():
 		# return message.body
 
 class EchoBot(fbchat.Client):
-
+    
     def __init__(self, email, password, debug=True, user_agent=None):
         fbchat.Client.__init__(self,email, password, debug, user_agent)
+        self.lastMood="unclear"
+        self.questionAsked=False
+        self.whatAskedAbout="none"
 
     def on_message(self, mid, author_id, author_name, message, metadata):
-        global lastMood
-        global questionAsked
-        global whatAskedAbout
-        
         self.markAsDelivered(author_id, mid) #mark delivered
         self.markAsRead(author_id) #mark read
 
-        message=message.lower() #formats message
-        message=ChatBotForStuyHacks.removeUnwantedSymbols(message)
-
-        mood=ChatBotForStuyHacks.modifyMood(MoodyBot.getEmotion(message)) #finds mood
-
-        #print(ChatBotForStuyHacks.botResponse(message,mood,lastMood,questionAsked,whatAskedAbout))
-        
-        moodyResponse,questionAsked,whatAskedAbout = ChatBotForStuyHacks.botResponse(message,mood,lastMood,questionAsked,whatAskedAbout)
-        
-        lastMood=mood #changes lastMood to mood
                 
         # if you are not the author, echo
         if str(author_id) != str(self.uid):
+            message=message.lower() #formats message
+            message=ChatBotForStuyHacks.removeUnwantedSymbols(message)
+
+            mood=ChatBotForStuyHacks.modifyMood(MoodyBot.getEmotion(message)) #finds mood
+        
+            moodyResponse,self.questionAsked,self.whatAskedAbout = ChatBotForStuyHacks.botResponse(message,mood,self.lastMood,self.questionAsked,self.whatAskedAbout)
+           # print("what asked about is "+self.whatAskedAbout)
+
+            self.lastMood=mood #changes lastMood to mood
+            #print(self.lastMood)
             self.send(author_id,moodyResponse)
 
 bot = EchoBot("moodybotchat@gmail.com", "moodybotchatstuyhacks")

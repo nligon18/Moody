@@ -50,23 +50,30 @@ def checkForWord(message,word):
             return True
     return False
 
-def checkGreeting(message):
+def checkForWords(message,words):
     words=message.split(" ")
-    for item in words:
-        if words in GREETINGS:
+    for word in words:
+        if word in GREETINGS:
             return True
     return False
 
 def botResponse(message,mood,lastMood,questionAsked,whatAskedAbout):
+    #print("last mood is "+lastMood)
+    #print(message)
+    #print("what asked about in the bot response is "+whatAskedAbout)
     sameMood= (mood==lastMood)
     mood=modifyMood(mood)                                                           #Finds Mood
     response=""
     #end=message.find("?")
     #if end!=-1:
     #    question=findQuestion(message,end)#finds what the question is
+    if checkForWords(message,GREETINGS):
+        return ("Hi! My name is Moody. What is your name?",True,"name")
     response=changePronouns(message)
     if questionAsked==True:
+       # print("question was asked")
         if whatAskedAbout=="mood":
+            #print("question was about mood")
             if checkForWord(message,"yes")==True:
                 if lastMood=="happy":
                     whatAskedAbout="why happy"
@@ -74,8 +81,20 @@ def botResponse(message,mood,lastMood,questionAsked,whatAskedAbout):
                 else:
                     whatAskedAbout="why "+lastMood
                     return ("Oh, I am sorry you are "+lastMood+". I hope you feel better soon. Why do you feel "+lastMood+"?",questionAsked,whatAskedAbout)
-        #if whatAskedAbout=="day":
-         #   lookFor
+            return ("I'm sorry.",False,"none")
+        
+        if whatAskedAbout=="name":
+            #print("question was about name")
+            name=findName(message)
+            questionAsked=True
+            whatAskedAbout="day"
+            return ("Hi "+name+"! How was your day?",questionAsked,whatAskedAbout)
+
+        if whatAskedAbout=="day":
+            if checkForWords(message,GOOD_KEY_WORDS):
+                return ("It sounds like you had a good day!",False,"none")
+            if checkForWords(message,BAD_KEY_WORDS):
+                return ("It sounds like you had a bad day. I am sorry.",False,"none")
             
     if not message[0]=="i":
         response="you are "+message
