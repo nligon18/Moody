@@ -3,6 +3,7 @@ import requests
 import json
 import ChatBotForStuyHacks
 import MoodyBot
+from Crypto.Cipher import AES
 
 def  getName(author_id):
 	url = "https://graph.facebook.com/" + author_id + "?fields=name&access_token=1910943402516729|NFxHu_FCpNW-Cj1zHRIIfoB5FQI"
@@ -71,6 +72,28 @@ class EchoBot(fbchat.Client):
             self.lastMood=mood #changes lastMood to mood
             #print(self.lastMood)
             self.send(author_id,moodyResponse)
+def encrypt(password):
+    global cipher_text
+    encryption_suite = AES.new('STUYHACKS2017BOT', AES.MODE_CBC, 'This is an IV456')
+    cipher_text = encryption_suite.encrypt(password)
+    print cipher_text
+    text_file = open("Output.txt", "w")
+    text_file.write(cipher_text)
+    text_file.close()
+    return cipher_text
+# hash = encrypt("moodybotchatstuyhacksSALTSALTBAL")
+fbpw = raw_input('Enter your FB Password: ')
+hash = encrypt(fbpw + "SALTSALTBAL")
 
-bot = EchoBot("moodybotchat@gmail.com", "moodybotchatstuyhacks")
+print hash
+def decryptPW():
+    key = raw_input('Enter the decryption key: ')
+
+    decryption_suite = AES.new(key, AES.MODE_CBC, 'This is an IV456')
+    plain_text = decryption_suite.decrypt(hash)
+    plain_text = plain_text[:-11]
+    print plain_text
+    return plain_text
+decryptedPW = decryptPW()
+bot = EchoBot("moodybotchat@gmail.com", decryptedPW)
 bot.listen()
