@@ -1,0 +1,26 @@
+*py[co]
+
+# Test scripts
+*.sh
+
+# Packages
+*.egg
+*.egg-info
+dist
+build
+eggs
+parts
+bin
+var
+sdist
+develop-eggs
+.installed.cfg
+
+# Vim
+.*.sw[op]
+
+# Sphinx documentation
+docs/_build/
+
+# Data for tests
+tests.data

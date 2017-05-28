@@ -2,6 +2,7 @@ import fbchat
 import requests
 import json
 import ChatBotForStuyHacks
+import MoodyBot
 
 lastMood="unclear"
 questionAsked=False
@@ -64,7 +65,9 @@ class EchoBot(fbchat.Client):
         message=message.lower() #formats message
         message=ChatBotForStuyHacks.removeUnwantedSymbols(message)
 
-        mood=modifyMood(MoodyBot.getEmotion(message)) #finds mood
+        mood=ChatBotForStuyHacks.modifyMood(MoodyBot.getEmotion(message)) #finds mood
+
+        #print(ChatBotForStuyHacks.botResponse(message,mood,lastMood,questionAsked,whatAskedAbout))
         
         moodyResponse,questionAsked,whatAskedAbout = ChatBotForStuyHacks.botResponse(message,mood,lastMood,questionAsked,whatAskedAbout)
         

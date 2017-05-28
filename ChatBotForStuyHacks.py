@@ -9,6 +9,7 @@ PRONOUN_MAPS={"you":"i","i":"you","we":"you guys","he":"he","she":"she","they":"
 PRONOUNS=["you","i","we","they","it","he","she","me","us","am","are","im","your","my","mine","yours"]
 BAD_KEY_WORDS=['terrible','awful','bad','horrible']
 GOOD_KEY_WORDS=['good','great','amazing','spectacular','awesome','fantastic']
+GREETINGS=["hi","hey","hello","sup","hola"]
 
 
 def findName(name):
@@ -49,13 +50,20 @@ def checkForWord(message,word):
             return True
     return False
 
+def checkGreeting(message):
+    words=message.split(" ")
+    for item in words:
+        if words in GREETINGS:
+            return True
+    return False
+
 def botResponse(message,mood,lastMood,questionAsked,whatAskedAbout):
-    sameMood=mood==lastMood
+    sameMood= (mood==lastMood)
     mood=modifyMood(mood)                                                           #Finds Mood
     response=""
     #end=message.find("?")
     #if end!=-1:
-    #    question=findQuestion(message,end)                                         #finds what the question is
+    #    question=findQuestion(message,end)#finds what the question is
     response=changePronouns(message)
     if questionAsked==True:
         if whatAskedAbout=="mood":
@@ -120,7 +128,7 @@ def main():
         mood=modifyMood(MoodyBot.getEmotion(message))
 
         
-        response,questionAsked,whatAskedAbout=botResponse(message,mood,sameMood,lastMood,questionAsked,whatAskedAbout)
+        response,questionAsked,whatAskedAbout=botResponse(message,mood,lastMood,questionAsked,whatAskedAbout)
 
 
         lastMood=mood
