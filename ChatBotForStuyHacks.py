@@ -7,7 +7,10 @@ ENDS=["bye","goodbye","adios","see ya","see you later","good bye"]
 WORDS_BEFORE_NAMES=["is","named","am","im"]
 PRONOUN_MAPS={"you":"i","i":"you","we":"you guys","he":"he","she":"she","they":"they","us":"you guys","me":"you","it":"it","am":"are","im":"you are","my":"your","your":"my","mine":"yours","yours":"mine","ours":"yours"}
 PRONOUNS=["you","i","we","they","it","he","she","me","us","am","are","im","your","my","mine","yours"]
+
+
 questionAsked=False
+whatAskedAbout="none"
 
 
 def findName(name):
@@ -52,11 +55,13 @@ def botResponse(message,mood,sameMood):
         response="you are "+message
     if mood=="unsure":
         questionAsked=True
+        whatAskedAbout="day"
         return "Oh, "+response+". How was your day?"                                #two responses
     questionAsked=True
     if sameMood:
         finalResponse="Oh, "+response+"."
     else:
+        whatAskedAbout="mood"
         finalResponse="Oh, "+response+". Are you feeling "+mood+"?"
     return finalResponse
 
