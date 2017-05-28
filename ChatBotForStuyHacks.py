@@ -7,10 +7,8 @@ ENDS=["bye","goodbye","adios","see ya","see you later","good bye"]
 WORDS_BEFORE_NAMES=["is","named","am","im"]
 PRONOUN_MAPS={"you":"i","i":"you","we":"you guys","he":"he","she":"she","they":"they","us":"you guys","me":"you","it":"it","am":"are","im":"you are","my":"your","your":"my","mine":"yours","yours":"mine","ours":"yours"}
 PRONOUNS=["you","i","we","they","it","he","she","me","us","am","are","im","your","my","mine","yours"]
-
-
-questionAsked=False
-whatAskedAbout="none"
+BAD_KEY_WORDS=['terrible','awful','bad','horrible']
+GOOD_KEY_WORDS=['good','great','amazing','spectacular','awesome','fantastic']
 
 
 def findName(name):
@@ -44,26 +42,47 @@ def changePronouns(message):
         response+=words[i]+" "
     return response[:-1]
 
-def botResponse(message,mood,sameMood):
+def checkForWord(message,word):
+    words=message.split(" ")
+    for item in words:
+        if item==word:
+            return True
+    return False
+
+def botResponse(message,mood,lastMood,questionAsked,whatAskedAbout):
+    sameMood=mood==lastMood
     mood=modifyMood(mood)                                                           #Finds Mood
     response=""
     #end=message.find("?")
     #if end!=-1:
     #    question=findQuestion(message,end)                                         #finds what the question is
     response=changePronouns(message)
+    if questionAsked==True:
+        if whatAskedAbout=="mood":
+            if checkForWord(message,"yes")==True:
+                if lastMood=="happy":
+                    whatAskedAbout="why happy"
+                    return ("I am glad you are happy! Why are you happy?",questionAsked,whatAskedAbout)
+                else:
+                    whatAskedAbout="why "+lastMood
+                    return ("Oh, I am sorry you are "+lastMood+". I hope you feel better soon. Why do you feel "+lastMood+"?",questionAsked,whatAskedAbout)
+        #if whatAskedAbout=="day":
+         #   lookFor
+            
     if not message[0]=="i":
         response="you are "+message
     if mood=="unsure":
         questionAsked=True
         whatAskedAbout="day"
-        return "Oh, "+response+". How was your day?"                                #two responses
-    questionAsked=True
+        return ("Oh, "+response+". How was your day?",questionAsked,whatAskedAbout)                             #two responses
     if sameMood:
+        questionAsked=False
         finalResponse="Oh, "+response+"."
     else:
+        questionAsked=True
         whatAskedAbout="mood"
         finalResponse="Oh, "+response+". Are you feeling "+mood+"?"
-    return finalResponse
+    return (finalResponse,questionAsked,whatAskedAbout)
 
 
 def removeUnwantedNumbers(message):
@@ -84,8 +103,8 @@ def removeUnwantedSymbols(message):
 
 def main():
     lastMood="unsure"
-    sameMood=False
-
+    questionAsked=False
+    whatAskedAbout="none"
     
     name=raw_input("Hi! My name is Moody. What is your name?\n").lower()
     name=removeUnwantedSymbols(name)
@@ -97,23 +116,14 @@ def main():
     message=removeUnwantedSymbols(message)
 
 
-    mood=MoodyBot.getEmotion(message)
-    if mood==lastMood:
-        sameMood=True
-    else:
-        sameMood=False
-    lastMood=mood
-
-    
     while not removeUnwantedNumbers(message) in ENDS:
-        mood=MoodyBot.getEmotion(message)
-        if mood==lastMood:
-            sameMood=True
-        else:
-            sameMood=False
-        lastMood=mood
+        mood=modifyMood(MoodyBot.getEmotion(message))
+
         
-        response=botResponse(message,mood,sameMood)
+        response,questionAsked,whatAskedAbout=botResponse(message,mood,sameMood,lastMood,questionAsked,whatAskedAbout)
+
+
+        lastMood=mood
 
         
         message=raw_input(response+"\n").lower()
@@ -125,4 +135,4 @@ def main():
         
     print("Bye! Come back soon!")
 
-main()
+#main()
