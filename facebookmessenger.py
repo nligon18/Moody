@@ -82,7 +82,7 @@ def encrypt(password):
     text_file.close()
     return cipher_text
 # hash = encrypt("moodybotchatstuyhacksSALTSALTBAL")
-fbun = raw_input('Enter your FB Email')
+fbun = raw_input('Enter your FB Email: ')
 fbpw = raw_input('Enter your FB Password: ')
 # SALTSALTBAL is Hash Salt
 hash = encrypt(fbpw + "SALTSALTBAL")
